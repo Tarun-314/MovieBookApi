@@ -1,0 +1,87 @@
+@MovieBookApi_HostAddress = https://localhost:7263
+
+GET {{MovieBookApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+POST {{MovieBookApi_HostAddress}}/login
+Content-Type:application/json
+
+{
+  "username": "Admin1",
+  "password": "adminhash1"
+}
+###
+POST {{MovieBookApi_HostAddress}}/Islogin
+Content-Type:application/json
+
+{
+  "username": "Ram",
+  "password": "sita",
+  "Token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNb3ZpZUJvb2siLCJhdWQiOlsiTW92aWVCb29rLmNvbSIsIk1vdmllQm9vay5jb20iXSwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE3MjQzMzg0NDh9.4f8Nxa_B9eCazIf6YKfeVsmk-ky-rdNMM8EIOMG4iyU"
+}
+###
+
+POST {{MovieBookApi_HostAddress}}/login
+Content-Type: application/json
+
+{
+  "username": "sam",
+  "password": "chai"
+}
+
+###
+
+GET {{MovieBookApi_HostAddress}}/AllTheaters
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJFQkRDMkE4RS1ENDdCLTRCOTAtOEFFRS1DQ0RGRDYyNzJENjMiLCJpc3MiOiJNb3ZpZUJvb2siLCJhdWQiOlsiTW92aWVCb29rLmNvbSIsIk1vdmllQm9vay5jb20iXSwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsImV4cCI6MTcyNzY2NzM2M30.AXMXthH_SX3oHSfqYTKh-8DWTQAA2XBOXJdE4i-4q6k
+###
+
+GET {{MovieBookApi_HostAddress}}/AllMovies
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNb3ZpZUJvb2siLCJhdWQiOlsiTW92aWVCb29rLmNvbSIsIk1vdmllQm9vay5jb20iXSwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsImV4cCI6MTcyNzEwODk3M30.HblJHCvr6G3TgH8FwSigVADJy96YMPi991dSQW293oE
+
+
+###
+
+GET {{MovieBookApi_HostAddress}}/TheaterMovies/1F5F85B4-56C3-40D1-AC54-0010766AEBA6/2024-08-30
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNb3ZpZUJvb2siLCJhdWQiOlsiTW92aWVCb29rLmNvbSIsIk1vdmllQm9vay5jb20iXSwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsImV4cCI6MTcyNzEwODk3M30.HblJHCvr6G3TgH8FwSigVADJy96YMPi991dSQW293oE
+###
+GET {{MovieBookApi_HostAddress}}/ShowSeats/1F5F85B4-56C3-40D1-AC54-0010766AEBA6/00E57EEB-5B5B-446A-8C8C-D01032D59552/2024-08-30/10:00AM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNb3ZpZUJvb2siLCJhdWQiOlsiTW92aWVCb29rLmNvbSIsIk1vdmllQm9vay5jb20iXSwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsImV4cCI6MTcyNzEwODk3M30.HblJHCvr6G3TgH8FwSigVADJy96YMPi991dSQW293oE
+###
+GET {{MovieBookApi_HostAddress}}/Coupon/SAVE500
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNb3ZpZUJvb2siLCJhdWQiOlsiTW92aWVCb29rLmNvbSIsIk1vdmllQm9vay5jb20iXSwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsImV4cCI6MTcyNzEwODk3M30.HblJHCvr6G3TgH8FwSigVADJy96YMPi991dSQW293oE
+###
+
+GET {{MovieBookApi_HostAddress}}/MoviesTheatre/24E83A8B-4CE0-4E2F-B612-EA2CFDD1F395/2024-08-30
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNb3ZpZUJvb2siLCJhdWQiOlsiTW92aWVCb29rLmNvbSIsIk1vdmllQm9vay5jb20iXSwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsImV4cCI6MTcyNzEwODk3M30.HblJHCvr6G3TgH8FwSigVADJy96YMPi991dSQW293oE
+###
+
+POST {{MovieBookApi_HostAddress}}/AddBooking
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNb3ZpZUJvb2siLCJhdWQiOlsiTW92aWVCb29rLmNvbSIsIk1vdmllQm9vay5jb20iXSwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsImV4cCI6MTcyNzEwODk3M30.HblJHCvr6G3TgH8FwSigVADJy96YMPi991dSQW293oE
+Content-Type: application/json
+
+{
+  "userId": "72F61BA2-B98C-4D6A-8EF5-D0B8F556E273",
+  "movieId": "BF91ADB3-F363-4D08-A5B6-81E7D88D68A2",
+  "theatreId": "C23E9179-BA75-4C5D-AFFC-E8C5CF03AEE6",
+  "bookingDate": "2024-08-30T14:23:12.675Z",
+  "showDate":"2024-08-31",
+  "showTime": "string",
+  "screenNumber": 1,
+  "numberOfSeats": 2,
+  "seats": "string",
+  "totalPrice": 4000,
+  "status": "string",
+  "paymentMethod": "string"
+}
+
+###
+
+GET {{MovieBookApi_HostAddress}}/Reviews/24E83A8B-4CE0-4E2F-B612-EA2CFDD1F395
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJNb3ZpZUJvb2siLCJhdWQiOlsiTW92aWVCb29rLmNvbSIsIk1vdmllQm9vay5jb20iXSwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsImV4cCI6MTcyNzEwODk3M30.HblJHCvr6G3TgH8FwSigVADJy96YMPi991dSQW293oE
+###
+
+GET {{MovieBookApi_HostAddress}}/Admin/GetAllUsers
+
+###
