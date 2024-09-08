@@ -724,6 +724,9 @@ GO
 ALTER TABLE [dbo].[Bookings]  WITH CHECK ADD FOREIGN KEY([MovieID])
 REFERENCES [dbo].[Movies] ([MovieID])
 GO
+ALTER TABLE [dbo].[Bookings]  WITH CHECK ADD FOREIGN KEY([TheatreID])
+REFERENCES [dbo].[Theatres] ([TheatreID])
+GO
 ALTER TABLE [dbo].[Bookings]  WITH CHECK ADD FOREIGN KEY([UserID])
 REFERENCES [dbo].[Users] ([UserID])
 GO

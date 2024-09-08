@@ -35,5 +35,7 @@ public partial class Booking
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
+    public virtual Theatre Theatre { get; set; } = null!;
+
     public virtual User User { get; set; } = null!;
 }

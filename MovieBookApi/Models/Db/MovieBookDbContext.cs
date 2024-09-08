@@ -39,7 +39,7 @@ public partial class MovieBookDbContext : DbContext
     {
         modelBuilder.Entity<Booking>(entity =>
         {
-            entity.HasKey(e => e.BookingId).HasName("PK__Bookings__73951ACDD28DFB48");
+            entity.HasKey(e => e.BookingId).HasName("PK__Bookings__73951ACD434A8402");
 
             entity.Property(e => e.BookingId)
                 .HasMaxLength(36)
@@ -77,17 +77,22 @@ public partial class MovieBookDbContext : DbContext
             entity.HasOne(d => d.Movie).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.MovieId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Bookings__MovieI__5629CD9C");
+                .HasConstraintName("FK__Bookings__MovieI__10566F31");
+
+            entity.HasOne(d => d.Theatre).WithMany(p => p.Bookings)
+                .HasForeignKey(d => d.TheatreId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Bookings__Theatr__0697FACD");
 
             entity.HasOne(d => d.User).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Bookings__UserID__571DF1D5");
+                .HasConstraintName("FK__Bookings__UserID__0F624AF8");
         });
 
         modelBuilder.Entity<Coupon>(entity =>
         {
-            entity.HasKey(e => e.CouponId).HasName("PK__Coupons__384AF1DA07533535");
+            entity.HasKey(e => e.CouponId).HasName("PK__Coupons__384AF1DA7BA4B831");
 
             entity.Property(e => e.CouponId)
                 .HasMaxLength(36)
@@ -102,7 +107,7 @@ public partial class MovieBookDbContext : DbContext
 
         modelBuilder.Entity<Movie>(entity =>
         {
-            entity.HasKey(e => e.MovieId).HasName("PK__Movies__4BD2943AA6EB8BFA");
+            entity.HasKey(e => e.MovieId).HasName("PK__Movies__4BD2943A58309B10");
 
             entity.Property(e => e.MovieId)
                 .HasMaxLength(36)
@@ -137,9 +142,9 @@ public partial class MovieBookDbContext : DbContext
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__9B556A5865EA06C6");
+            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__9B556A58A86982D6");
 
-            entity.HasIndex(e => e.TransactionId, "UQ__Payments__55433A4ABCE475E2").IsUnique();
+            entity.HasIndex(e => e.TransactionId, "UQ__Payments__55433A4AC60806B6").IsUnique();
 
             entity.Property(e => e.PaymentId)
                 .HasMaxLength(36)
@@ -165,12 +170,12 @@ public partial class MovieBookDbContext : DbContext
             entity.HasOne(d => d.Booking).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.BookingId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Payments__Bookin__5812160E");
+                .HasConstraintName("FK__Payments__Bookin__17F790F9");
         });
 
         modelBuilder.Entity<Review>(entity =>
         {
-            entity.HasKey(e => e.ReviewId).HasName("PK__Reviews__74BC79AEDD622019");
+            entity.HasKey(e => e.ReviewId).HasName("PK__Reviews__74BC79AED9B1B4EB");
 
             entity.Property(e => e.ReviewId)
                 .HasMaxLength(36)
@@ -195,17 +200,17 @@ public partial class MovieBookDbContext : DbContext
             entity.HasOne(d => d.Movie).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.MovieId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Reviews__MovieID__59063A47");
+                .HasConstraintName("FK__Reviews__MovieID__1EA48E88");
 
             entity.HasOne(d => d.User).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Reviews__UserID__59FA5E80");
+                .HasConstraintName("FK__Reviews__UserID__1DB06A4F");
         });
 
         modelBuilder.Entity<Theatre>(entity =>
         {
-            entity.HasKey(e => e.TheatreId).HasName("PK__Theatres__13B3838175B8C367");
+            entity.HasKey(e => e.TheatreId).HasName("PK__Theatres__13B38381C16CEAD1");
 
             entity.Property(e => e.TheatreId)
                 .HasMaxLength(36)
@@ -232,7 +237,7 @@ public partial class MovieBookDbContext : DbContext
 
         modelBuilder.Entity<TheatreMovie>(entity =>
         {
-            entity.HasKey(e => e.TheatreMovieId).HasName("PK__TheatreM__D4B5FCA9D71D0919");
+            entity.HasKey(e => e.TheatreMovieId).HasName("PK__TheatreM__D4B5FCA9B08AC6C5");
 
             entity.Property(e => e.TheatreMovieId)
                 .HasMaxLength(36)
@@ -255,19 +260,19 @@ public partial class MovieBookDbContext : DbContext
             entity.HasOne(d => d.Movie).WithMany(p => p.TheatreMovies)
                 .HasForeignKey(d => d.MovieId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__TheatreMo__Movie__5AEE82B9");
+                .HasConstraintName("FK__TheatreMo__Movie__2A164134");
 
             entity.HasOne(d => d.Theatre).WithMany(p => p.TheatreMovies)
                 .HasForeignKey(d => d.TheatreId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__TheatreMo__Theat__5BE2A6F2");
+                .HasConstraintName("FK__TheatreMo__Theat__29221CFB");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC385CE614");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC30A5A071");
 
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D10534291E2A72").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D10534CA47A072").IsUnique();
 
             entity.Property(e => e.UserId)
                 .HasMaxLength(36)

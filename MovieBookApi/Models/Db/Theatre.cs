@@ -23,5 +23,7 @@ public partial class Theatre
 
     public DateTime? UpdatedAt { get; set; }
 
+    public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+
     public virtual ICollection<TheatreMovie> TheatreMovies { get; set; } = new List<TheatreMovie>();
 }

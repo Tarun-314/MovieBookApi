@@ -9,13 +9,14 @@ using MovieBookApi.Models.ResultClasses;
 
 namespace MovieBookApi.Services
 {
+  
+
     public interface IMovieStatisticsService
     {
-        Task<List<TheatreMovieWithName>> GetMoviesInWeekAsync(string multiplexName, DateOnly startDate, DateOnly endDate);
-        Task<int> GetTotalTicketSalesAsync(string movieName, DateOnly month);
-        Task<List<MovieSales>> GetSalesByQuarterAsync(int year, int quarter);
-        Task<Movie> GetMovieOfTheMonthAsync(DateOnly month);
-        Task<Movie> GetDisasterOfTheMonthAsync(DateOnly month);
+        Task<List<MovieCollection>> GetMovieCollections(string movieid);
+        Task<List<TheatreSales>> GetTheatreSales(string theatreid);
+        Task<uMovie> GetMovieOfTheMonthAsync(DateOnly month);
+        Task<uMovie> GetDisasterOfTheMonthAsync(DateOnly month);
     }
 
     public class MovieStatisticsService : IMovieStatisticsService
@@ -27,93 +28,101 @@ namespace MovieBookApi.Services
             this.context = context;
         }
 
-        private static string Getshows(string showTimeString)
+        public async Task<uMovie> GetDisasterOfTheMonthAsync(DateOnly month)
         {
-            var showTimesDict = JsonSerializer.Deserialize<Dictionary<string, string>>(showTimeString);
-            var showTimes = showTimesDict!.Keys.ToList();
-            return string.Join(", ", showTimes);
-        }
-
-        public async Task<List<TheatreMovieWithName>> GetMoviesInWeekAsync(string multiplexName, DateOnly startDate, DateOnly endDate)
-        {
-            var theatreMovieDetails = from tm in context.TheatreMovies
-                                      join movie in context.Movies on tm.MovieId equals movie.MovieId
-                                      join theatre in context.Theatres on tm.TheatreId equals theatre.TheatreId
-                                      where theatre.Name == multiplexName && tm.ShowDate >= startDate && tm.ShowDate <= endDate
-                                      select new TheatreMovieWithName
-                                      {
-                                          TheatreMovieId = tm.TheatreMovieId,
-                                          MovieId = tm.MovieId,
-                                          TheatreId = tm.TheatreId,
-                                          ScreenNumber = tm.ScreenNumber,
-                                          ShowDate = tm.ShowDate,
-                                          ShowTimes = Getshows(tm.ShowTimes),
-                                          AvailableSeats = tm.AvailableSeats,
-                                          MovieName = movie.Title,
-                                          TheatreName = theatre.Name
-                                      };
-
-            return await theatreMovieDetails.ToListAsync();
-        }
-
-        public async Task<int> GetTotalTicketSalesAsync(string movieName, DateOnly month)
-        {
-            return await context.Bookings
-                .Include(b => b.Movie)
-                .Where(b => b.Movie.Title == movieName && b.ShowDate.Month == month.Month && b.ShowDate.Year == month.Year)
-                .SumAsync(b => b.NumberOfSeats);
-        }
-
-        public async Task<List<MovieSales>> GetSalesByQuarterAsync(int year, int quarter)
-        {
-            var startMonth = (quarter - 1) * 3 + 1;
-            var endMonth = startMonth + 2;
-
-            var sales = from b in context.Bookings
-                        join m in context.Movies on b.MovieId equals m.MovieId
-                        where b.ShowDate.Year == year && b.ShowDate.Month >= startMonth && b.ShowDate.Month <= endMonth
-                        group b by m.Title into g
-                        select new MovieSales
-                        {
-                            MovieTitle = g.Key,
-                            TotalSales = g.Sum(b => b.NumberOfSeats)
-                        };
-
-            return await sales.ToListAsync();
-        }
-
-        public async Task<Movie> GetMovieOfTheMonthAsync(DateOnly month)
-        {
-            var movie = await context.Bookings
-                .Include(b => b.Movie)
-                .Where(b => b.ShowDate.Month == month.Month && b.ShowDate.Year == month.Year)
-                .GroupBy(b => b.Movie)
-                .OrderByDescending(g => g.Key.Likes) // Order by likes first
-                .ThenByDescending(g => g.Sum(b => b.NumberOfSeats)) // Then by number of seats if likes are the same
-                .Select(g => g.Key)
+            var movie = await context.Reviews
+                .Where(r => r.ReviewDate.Value.Month == month.Month && r.ReviewDate.Value.Year == DateTime.Now.Year)
+                .GroupBy(r => r.Movie)
+                .Select(g => new
+                {
+                    Movie = g.Key,
+                    AvgRating = g.Average(r => r.Rating)
+                })
+                .OrderBy(g => g.AvgRating)
+                .Select(g => g.Movie)
                 .FirstOrDefaultAsync();
-
-            return movie;
+            if (movie == null) return null;
+            return new uMovie
+            {
+                MovieId = movie.MovieId,
+                Title = movie.Title,
+                Genre = movie.Genre,
+                Duration = movie.Duration,
+                ReleaseDate =movie.ReleaseDate,
+                Rating = movie.Rating,
+                Likes = movie.Likes,
+                Description = movie.Description,
+                Casting = movie.Casting,
+                Trailer = movie.Trailer,
+                Language = movie.Language,
+                Image = movie.Image,
+                UpdatedAt = movie.UpdatedAt
+            };
         }
 
-        public async Task<Movie> GetDisasterOfTheMonthAsync(DateOnly month)
+
+        public async Task<List<MovieCollection>> GetMovieCollections(string movieid)
         {
-            var movie = await context.Bookings
-                .Include(b => b.Movie)
-                .Where(b => b.ShowDate.Month == month.Month && b.ShowDate.Year == month.Year)
-                .GroupBy(b => b.Movie)
-                .OrderBy(g => g.Sum(b => b.NumberOfSeats))
-                .Select(g => g.Key)
-                .FirstOrDefaultAsync();
+            var collections = await context.Bookings
+            .Where(b => b.MovieId == movieid)
+            .GroupBy(b => new { b.TheatreId, b.Theatre.Name })
+            .Select(g => new MovieCollection
+            {
+                TheatreName = g.Key.Name,
+                TotalAmount = g.Sum(b => b.TotalPrice)
+            })
+            .ToListAsync();
 
-            return movie;
+            return collections;
         }
-    }
 
-    public class MovieSales
-    {
-        public string MovieTitle { get; set; }
-        public int TotalSales { get; set; }
-    }
+        public async Task<uMovie> GetMovieOfTheMonthAsync(DateOnly month)
+        {
+            var movie = await context.Reviews
+                .Where(r => r.ReviewDate.Value.Month == month.Month && r.ReviewDate.Value.Year == DateTime.Now.Year)
+                .GroupBy(r => r.Movie)
+                .Select(g => new
+                {
+                    Movie = g.Key,
+                    AvgRating = g.Average(r => r.Rating)
+                })
+                .OrderByDescending(g => g.AvgRating)
+                .Select(g => g.Movie)
+                .FirstOrDefaultAsync();
+            if (movie == null) return null;
+            return new uMovie
+            {
+                MovieId = movie.MovieId,
+                Title = movie.Title,
+                Genre = movie.Genre,
+                Duration = movie.Duration,
+                ReleaseDate =movie.ReleaseDate,
+                Rating = movie.Rating,
+                Likes = movie.Likes,
+                Description = movie.Description,
+                Casting = movie.Casting,
+                Trailer = movie.Trailer,
+                Language = movie.Language,
+                Image = movie.Image,
+                UpdatedAt = movie.UpdatedAt
+            };
+        }
 
+
+        public async Task<List<TheatreSales>> GetTheatreSales(string theatreId)
+        {
+            var sales = await context.Bookings
+                .Where(b => b.TheatreId == theatreId && b.BookingDate.Value.Year == DateTime.Now.Year)
+                .GroupBy(b => b.BookingDate.Value.Month)
+                .Select(g => new TheatreSales
+                {
+                    Month = g.Key,
+                    TotalAmount = g.Sum(b => b.TotalPrice)
+                })
+                .ToListAsync();
+
+            return sales;
+        }
+
+    }
 }

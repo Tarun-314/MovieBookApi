@@ -19,7 +19,6 @@ namespace MovieBookApi.Services
         public string GetShowSeats(string theatreId, string movieId, DateOnly showDate, string showTime);
         public decimal GetDiscount(string code);
         public List<TheatreofMovie> GetTheatreofMovies(string movieId, DateOnly showDate, string city);
-        public bool PutShowSeats(string theatreId, string movieId, DateOnly showDate, string showtime, string seatString);
         public List<ReviewWithUserName> GetReviews(string movieId);
         public string AddBooking(BookingData booking);
         public iUser GetUserById(string userId);
@@ -141,7 +140,7 @@ namespace MovieBookApi.Services
             return res;
         }
        
-        public bool PutShowSeats(string theatreId, string movieId, DateOnly showDate, string showtime, string seatString)
+        private bool PutShowSeats(string theatreId, string movieId, DateOnly showDate, string showtime, string seatString)
         {
             logger.LogInformation(showDate.ToString());
             var theatreMovie = context.TheatreMovies

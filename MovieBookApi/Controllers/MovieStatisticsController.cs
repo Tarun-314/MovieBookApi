@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MovieBookApi.Models.ResultClasses;
 using MovieBookApi.Services;
 using WebApi2.Models;
 
@@ -10,56 +11,51 @@ namespace MovieBookApi.Controllers
     [ApiController]
     public class MovieStatisticsController : ControllerBase
     {
-        private readonly IMovieStatisticsService? _movieStatisticsService;
+        private readonly IMovieStatisticsService service;
 
         public MovieStatisticsController(IMovieStatisticsService movieStatisticsService)
         {
-            _movieStatisticsService = movieStatisticsService;
+            service = movieStatisticsService;
         }
 
-        //[Authorize(Policy = SecurityPolicy.Admin)]
-        [HttpGet]
-        [Route("week/{multiplexName}")]
-        public async Task<IActionResult> GetMoviesInWeek(string multiplexName, [FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
+        // Route for GetMovieCollections
+        [HttpGet("MovieCollections/{movieId}")]
+        public async Task<ActionResult<List<MovieCollection>>> GetMovieCollections(string movieId)
         {
-            var movies = await _movieStatisticsService.GetMoviesInWeekAsync(multiplexName, startDate, endDate);
-            return Ok(movies);
+            var result = await service.GetMovieCollections(movieId);
+            if (result == null || result.Count == 0)
+                return NotFound(new DataTransferObject() {IsSuccess=false, Message="No collections found for the specified movie." });
+            return Ok(result);
         }
 
-        //[Authorize(Policy = SecurityPolicy.Admin)]
-        [HttpGet]
-        [Route("sales/{movieName}")]
-        public async Task<IActionResult> GetTotalTicketSales(string movieName, [FromQuery] DateOnly month)
+        // Route for GetTheatreSales
+        [HttpGet("TheatreSales/{theatreId}")]
+        public async Task<ActionResult<List<TheatreSales>>> GetTheatreSales(string theatreId)
         {
-            var totalSales = await _movieStatisticsService.GetTotalTicketSalesAsync(movieName, month);
-            return Ok(totalSales);
+            var result = await service.GetTheatreSales(theatreId);
+            if (result == null || result.Count == 0)
+                return NotFound(new DataTransferObject() { IsSuccess = false, Message = "No sales found for the specified theatre." });
+            return Ok(result);
         }
 
-        //[Authorize(Policy = SecurityPolicy.Admin)]
-        [HttpGet]
-        [Route("sales/quarter")]
-        public async Task<IActionResult> GetSalesByQuarter([FromQuery] int year, [FromQuery] int quarter)
+        // Route for GetMovieOfTheMonthAsync
+        [HttpGet("MOM/{month}")]
+        public async Task<ActionResult<uMovie>> GetMovieOfTheMonth(DateOnly month)
         {
-            var sales = await _movieStatisticsService.GetSalesByQuarterAsync(year, quarter);
-            return Ok(sales);
+            var result = await service.GetMovieOfTheMonthAsync(month);
+            if (result == null)
+                return NotFound(new DataTransferObject() { IsSuccess = false, Message = "No movie of the month found." });
+            return Ok(result);
         }
 
-        //[Authorize(Policy = SecurityPolicy.Admin)]
-        [HttpGet]
-        [Route("movie-of-the-month")]
-        public async Task<IActionResult> GetMovieOfTheMonth([FromQuery] DateOnly month)
+        // Route for GetDisasterOfTheMonthAsync
+        [HttpGet("DOM/{month}")]
+        public async Task<ActionResult<uMovie>> GetDisasterOfTheMonth(DateOnly month)
         {
-            var movie = await _movieStatisticsService.GetMovieOfTheMonthAsync(month);
-            return Ok(movie);
-        }
-
-        //[Authorize(Policy = SecurityPolicy.Admin)]
-        [HttpGet]
-        [Route("disaster-of-the-month")]
-        public async Task<IActionResult> GetDisasterOfTheMonth([FromQuery] DateOnly month)
-        {
-            var movie = await _movieStatisticsService.GetDisasterOfTheMonthAsync(month);
-            return Ok(movie);
+            var result = await service.GetDisasterOfTheMonthAsync(month);
+            if (result == null)
+                return NotFound(new DataTransferObject() { IsSuccess = false, Message = "No disaster movie of the month found." });
+            return Ok(result);
         }
     }
 }
