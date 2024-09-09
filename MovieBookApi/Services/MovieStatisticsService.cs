@@ -39,7 +39,22 @@ namespace MovieBookApi.Services
                     AvgRating = g.Average(r => r.Rating)
                 })
                 .OrderBy(g => g.AvgRating)
-                .Select(g => g.Movie)
+                .Select(g => new uMovie()
+                {
+                    MovieId = g.Movie.MovieId,
+                    Title = g.Movie.Title,
+                    Genre = g.Movie.Genre,
+                    Duration = g.Movie.Duration,
+                    ReleaseDate = g.Movie.ReleaseDate,
+                    Rating = g.AvgRating,
+                    Likes = g.Movie.Likes,
+                    Description = g.Movie.Description,
+                    Casting = g.Movie.Casting,
+                    Trailer = g.Movie.Trailer,
+                    Language = g.Movie.Language,
+                    Image = g.Movie.Image,
+                    UpdatedAt = g.Movie.UpdatedAt
+                })
                 .FirstOrDefaultAsync();
             if (movie == null) return null;
             return new uMovie
@@ -87,7 +102,22 @@ namespace MovieBookApi.Services
                     AvgRating = g.Average(r => r.Rating)
                 })
                 .OrderByDescending(g => g.AvgRating)
-                .Select(g => g.Movie)
+                .Select(g => new uMovie()
+                {
+                    MovieId = g.Movie.MovieId,
+                    Title = g.Movie.Title,
+                    Genre = g.Movie.Genre,
+                    Duration = g.Movie.Duration,
+                    ReleaseDate = g.Movie.ReleaseDate,
+                    Rating = g.AvgRating,
+                    Likes = g.Movie.Likes,
+                    Description = g.Movie.Description,
+                    Casting = g.Movie.Casting,
+                    Trailer = g.Movie.Trailer,
+                    Language = g.Movie.Language,
+                    Image = g.Movie.Image,
+                    UpdatedAt = g.Movie.UpdatedAt
+                })
                 .FirstOrDefaultAsync();
             if (movie == null) return null;
             return new uMovie

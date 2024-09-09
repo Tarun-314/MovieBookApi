@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MovieBookApi.Models.Db;
 using MovieBookApi.Models.ResultClasses;
 using MovieBookApi.Services;
+using System.Diagnostics.Metrics;
 using WebApi2.Models;
 
 namespace MovieBookApi.Controllers
