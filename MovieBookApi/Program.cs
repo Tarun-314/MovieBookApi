@@ -22,7 +22,7 @@ namespace MovieBookApi
             // Add services to the container.
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowLocalhost4200",
+                options.AddPolicy("AllowAllTypes",
                     builder =>
                     {
                         builder.AllowAnyOrigin()
@@ -117,7 +117,7 @@ namespace MovieBookApi
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseHttpsRedirection();
-            app.UseCors("AllowLocalhost4200");
+            app.UseCors("AllowAllTypes");
 
             app.UseAuthentication();
             app.UseAuthorization();
