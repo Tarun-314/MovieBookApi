@@ -277,7 +277,18 @@ namespace MovieBookApi.Controllers
             var Bookings = Service.GetAllBookings();
             return Ok(Bookings);
         }
-
+        /// <summary>
+        /// Updates the show dates of movie to current date
+        /// </summary>
+        /// <returns>status after updaing show dates/returns>
+        [Authorize(Policy = SecurityPolicy.Admin)]
+        [HttpPatch]
+        [Route("UpdateShowDates")]
+        public IActionResult UpdateShowDates()
+        {
+            var res = Service.UpdateshowDates();
+            return Ok(new DataTransferObject() { IsSuccess = true, Message = res });
+        }
 
     }
 }

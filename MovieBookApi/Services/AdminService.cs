@@ -23,6 +23,7 @@ namespace MovieBookApi.Services
         public void InsertTheatre(iTheatre theatre);
         public bool InsertTheatreMovie(iTheatreMovie theatreMovie);
         public bool ChangeUserRole(string userId, string role);
+        public string UpdateshowDates();
         public List<BookingHistory> GetAllBookings();
     }
     public class AdminService : IAdminService
@@ -421,6 +422,25 @@ namespace MovieBookApi.Services
                                   }).ToList();
 
             return bookingHistory;
+        }
+
+        public string UpdateshowDates()
+        {
+            var minShowDate = context.TheatreMovies.Min(tm => tm.ShowDate);
+            var today = DateOnly.FromDateTime(DateTime.Today);
+
+            if (minShowDate == today)
+            {
+                return "No update needed. Minimum show date is already today.";
+            }
+
+            var daysToAdd = today.DayNumber - minShowDate.DayNumber;
+
+            var result = context.TheatreMovies.ExecuteUpdate(m => m
+                .SetProperty(tm => tm.ShowDate, tm => tm.ShowDate.AddDays(daysToAdd))
+            );
+
+            return $"{result} show dates adjusted by {daysToAdd} days.";
         }
     }
 }
